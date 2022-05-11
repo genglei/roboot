@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:background="@color/translucent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_task_category_item"
+        android:layout_width="match_parent"
+        android:layout_height="66dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="@string/direct_select"
+        android:textColor="#ffffff"
+        android:textSize="30sp" />
+
+    <RelativeLayout
+        android:id="@+id/v_line"
+        android:layout_width="154.741dp"
+        android:layout_height="4dp"
+        android:background="@color/white">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#ffffff" />
+    </RelativeLayout>
+</LinearLayout>

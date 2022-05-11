@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/rl_daohanglan"
+        android:layout_width="match_parent"
+        android:layout_height="75.117dp"
+        android:background="#000000"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_back_home"
+            android:layout_width="110dp"
+            android:layout_height="80dp"
+            android:background="@drawable/daohang_back"
+            android:padding="30dp"
+            android:textSize="30sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/margin_42"
+            android:layout_marginLeft="@dimen/margin_18"
+            android:background="@drawable/robot_circular_bead_bg"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/iv_robot_task_award"
+                android:layout_width="26dp"
+                android:layout_height="32dp"
+                android:src="@drawable/medal_normal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="7dp"
+                android:text="@string/today_task_count"
+                android:textColor="#ffeeff"
+                android:textSize="@dimen/font_22" />
+
+            <TextView
+                android:id="@+id/tv_robot_task_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="7dp"
+                android:textColor="#ffeeff"
+                android:textSize="@dimen/font_22" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/iv_stop"
+            android:layout_width="33.803dp"
+            android:layout_height="33.803dp"
+            android:layout_marginRight="55dp"
+            android:src="@drawable/icon_stop"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_rightshuru"
+        android:layout_width="match_parent"
+        android:layout_height="826.2891dp"
+        android:background="@drawable/bg">
+
+        <RelativeLayout
+            android:layout_width="400.375dp"
+            android:layout_height="700.9766dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="122.441dp"
+            android:layout_marginTop="15.023dp"
+            android:background="@drawable/canzhuo_bg">
+
+            <ListView
+                android:id="@+id/lv_layers"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="153.568dp"
+                android:background="@null"
+                android:cacheColorHint="@android:color/transparent"
+                android:descendantFocusability="blocksDescendants"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="152.488dp"
+                android:listSelector="@android:color/transparent" />
+
+            <EditText
+                android:id="@+id/editText1"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:maxLength="8"
+                android:text="@string/first_layer"
+                android:textColor="@color/blue"
+                android:visibility="visible"
+                tools:visibility="visible" />
+
+            <EditText
+                android:id="@+id/editText2"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/editText1"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="60dp"
+                android:maxLength="8"
+                android:text="@string/second_layer"
+                tools:visibility="visible"
+                android:textColor="@color/red"
+                android:visibility="gone" />
+
+            <EditText
+                android:id="@+id/editText3"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/editText2"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="60dp"
+                android:maxLength="8"
+                android:text="@string/third_layer"
+                tools:visibility="visible"
+                android:textColor="@color/black"
+                android:visibility="visible" />
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/iv_arrow0"
+            android:layout_width="87.887dp"
+            android:layout_height="87.887dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="546.8516dp"
+            android:layout_marginTop="224.601dp"
+            android:background="@drawable/arrow"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/iv_arrow1"
+            android:layout_width="87.887dp"
+            android:layout_height="87.887dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="546.8516dp"
+            android:layout_marginTop="519.0547dp"
+            android:background="@drawable/arrow"
+            android:visibility="gone" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="700dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="550.7734dp"
+            android:layout_marginTop="15.775dp"
+            android:background="@drawable/shuzi_parent_bg">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="2.254dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="76dp"
+                android:background="@drawable/line_right" />
+            <!-- 标题-->
+            <GridView
+                android:id="@+id/gv_main_category"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:gravity="center"
+                android:listSelector="@android:color/transparent"
+                android:numColumns="2" />
+
+            <RelativeLayout
+                android:layout_width="707.6016dp"
+                android:layout_height="498.0234dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="23.286dp"
+                android:layout_marginTop="105.915dp">
+                <!--键盘1-->
+                <android.inputmethodservice.KeyboardView
+                    android:id="@+id/keyboard_view1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:background="@android:color/transparent"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:keyBackground="@drawable/btn_keyboard_key"
+                    android:keyTextColor="#ffffff"
+                    android:keyTextSize="50sp"
+                    android:labelTextSize="32sp"
+                    android:shadowRadius="0" />
+                <!--键盘2-->
+                <android.inputmethodservice.KeyboardView
+                    android:id="@+id/keyboard_view2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:background="@android:color/transparent"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="center"
+                    android:keyBackground="@drawable/btn_keyboard_key"
+                    android:keyTextColor="#ffffff"
+                    android:keyTextSize="50sp"
+                    android:labelTextSize="32sp"
+                    android:shadowRadius="0" />
+                <!--键盘3-->
+                <android.inputmethodservice.KeyboardView
+                    android:id="@+id/keyboard_view3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:background="@android:color/transparent"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="center"
+                    android:keyBackground="@drawable/btn_keyboard_key"
+                    android:keyTextColor="#ffffff"
+                    android:keyTextSize="50sp"
+                    android:labelTextSize="32sp"
+                    android:shadowRadius="0" />
+                <!--详细 号牌-->
+                <GridView
+                    android:id="@+id/gv_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:horizontalSpacing="6.009dp"
+                    android:listSelector="@color/translucent"
+                    android:numColumns="3"
+                    android:verticalSpacing="6.761dp" />
+            </RelativeLayout>
+            <!--、开始配送任务-->
+            <LinearLayout
+                android:id="@+id/ll_start_task"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="600.7578dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_start_deliver"
+                    android:layout_width="536.3359dp"
+                    android:layout_height="106.667dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="@string/start_delivery"
+                    android:textColor="@color/white"
+                    android:textSize="37.559dp" />
+            </LinearLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+</LinearLayout>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="avoid_obstacle">
+        <item>请让一让，宝宝要去救厨师爷爷</item>
+        <item>跌倒了，爬起来再哭</item>
+    </array>
+    <array name="charge_to_kitchen">
+        <item>还没有睡醒就叫宝宝起来干活</item>
+        <item>今天吃什么，这是一个问题</item>
+    </array>
+    <array name="delivering">
+        <item>打算理发了，刘海甩的我脖子都崴了</item>
+        <item>脸变圆了能怪我吗？东西好吃能怪我吗</item>
+        <item>工作好有意思！尤其是看着别人工作！</item>
+        <item>我不是在吃，就是在送吃的路上！</item>
+        <item>只有填满肚子，人才不会空虚！</item>
+        <item>我有一个梦想，梦想有一天，全世界所有的饭店都会免费</item>
+        <item>我正在工作呢，不能聊天啊，尽管你们喜欢我，也不要留恋我</item>
+        <item>觉得自己特别迷人的时候一定要拍下来。</item>
+        <item>我唱歌哪有跑调，我只是喜欢唱自己的调调。我去送物了。</item>
+        <item>工资哪里去了？恩恩，都拿去交电费。</item>
+        <item>刚才看到一个小朋友跟我一样可爱呢。</item>
+        <item>我要努力工作，赚钱吃饭。</item>
+        <item>我要多走步，消化掉刚刚充的电。</item>
+        <item>即使我是四眼，但是我依旧很可爱。</item>
+        <item>我最近长胖了，都不爱自拍了。</item>
+        <item>戴眼镜的机器人都是很有学问的。</item>
+        <item>我是这里最可爱的机器人服务员，可以找我聊聊天。</item>
+        <item>我唱歌很好听，但是我一般不展示。</item>
+    </array>
+    <array name="go_charging">
+        <item>不要再对我好，我怕我戒不掉，我只能用工作填满我的心。</item>
+        <item>累死宝宝了，宝宝要回去睡觉了</item>
+    </array>
+    <array name="kitchen_wait">
+        <item>世界上最萌最可爱的人就是我呀。</item>
+        <item>服务员小姐姐不要太辛苦，工作都交给我来做吧。</item>
+        <item>我总喜欢自言自语，可能是个唠叨的机器人宝宝。</item>
+        <item>妈妈说，努力工作的宝宝才会被人喜欢。</item>
+    </array>
+    <array name="take_food_after_go_kitchen">
+        <item>觉得自己特别迷人的时候一定要拍下来。</item>
+        <item>我的直觉告诉我不能再胖了，但是减肥没有那么容易，每块肉都有它的脾气。</item>
+        <item>如果你想与我谈恋爱，那请留下手机号码。</item>
+        <item>工资哪里去了？恩恩，都拿去交电费。</item>
+        <item>刚才看到一个小朋友跟我一样可爱呢。</item>
+        <item>我要努力工作，赚钱吃饭。</item>
+        <item>我要多走步，消化掉刚刚充的电。</item>
+        <item>即使我是四眼，但是我依旧很可爱。</item>
+        <item>我最近长胖了，都不爱自拍了。</item>
+        <item>戴眼镜的机器人都是很有学问的。</item>
+        <item>我是这里最可爱的机器人服务员，可以找我聊聊天。</item>
+        <item>我唱歌很好听，但是我一般不展示。</item>
+    </array>
+    <array name="take_food_count_down">
+        <item>终于忙完了</item>
+        <item>我走了，别想我</item>
+    </array>
+    <array name="wifi_status">
+        <item />
+        <item>Scanning…</item>
+        <item>Connecting…</item>
+        <item>Authenticating…</item>
+        <item>Obtaining IP address…</item>
+        <item>Connected</item>
+        <item>Suspended</item>
+        <item>Disconnecting…</item>
+        <item>Disconnected</item>
+        <item>Unsuccessful</item>
+        <item>Blocked</item>
+        <item>Temporarily avoiding poor connection</item>
+    </array>
+</resources>

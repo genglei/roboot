@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Keyboard xmlns:android="http://schemas.android.com/apk/res/android" android:keyBackground="@android:color/transparent" android:keyWidth="231.362dp" android:keyHeight="119.437dp" android:verticalGap="6.761dp">
+    <Row>
+        <Key android:horizontalGap="6.009dp" android:codes="65" android:keyLabel="A"/>
+        <Key android:horizontalGap="6.009dp" android:codes="66" android:keyLabel="B"/>
+        <Key android:horizontalGap="6.009dp" android:codes="67" android:keyLabel="C"/>
+    </Row>
+    <Row>
+        <Key android:horizontalGap="6.009dp" android:codes="68" android:keyLabel="D"/>
+        <Key android:horizontalGap="6.009dp" android:codes="69" android:keyLabel="E"/>
+        <Key android:horizontalGap="6.009dp" android:codes="70" android:keyLabel="F"/>
+    </Row>
+    <Row>
+        <Key android:horizontalGap="6.009dp" android:codes="71" android:keyLabel="G"/>
+        <Key android:horizontalGap="6.009dp" android:codes="72" android:keyLabel="H"/>
+        <Key android:horizontalGap="6.009dp" android:codes="73" android:keyLabel="I"/>
+    </Row>
+    <Row>
+        <Key android:labelTextSize="59sp" android:horizontalGap="6.009dp" android:codes="-2" android:keyLabel="12#"/>
+        <Key android:horizontalGap="6.009dp" android:codes="74" android:keyLabel="J"/>
+        <Key android:keyTextSize="30sp" android:labelTextSize="32sp" android:horizontalGap="6.009dp" android:codes="-5" android:keyIcon="@drawable/delshuzi"/>
+    </Row>
+</Keyboard>

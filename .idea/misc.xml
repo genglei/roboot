@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="app/src/main/res/drawable-nodpi/btn_net_know_selector.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable-nodpi/btn_net_setting_selector.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable-nodpi/seek_bar_voice_circle.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable-nodpi/seek_bar_voice_point.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable-nodpi/square_check_selector.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable-nodpi/toastbg.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable-nodpi/white_round_bg.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable-nodpi/xuans.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/point_bg_selector.xml" value="0.334" />
+        <entry key="app/src/main/res/drawable/thumb.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/abc_action_bar_title_item.xml" value="0.26902173913043476" />
+        <entry key="app/src/main/res/layout/acticity_main.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_hostess.xml" value="0.14026402640264027" />
+        <entry key="app/src/main/res/layout/activity_ipsetting.xml" value="0.14026402640264027" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.14026402640264027" />
+        <entry key="app/src/main/res/layout/activity_point.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_robot.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_splash.xml" value="0.3808876811594203" />
+        <entry key="app/src/main/res/layout/adapter_gridview_select_point.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/listview_layer_item.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/task_item_category.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/view_toast.xml" value="0.1" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.165" />
+      </ProjectState>
+    </option>
+  </component>
+</project>

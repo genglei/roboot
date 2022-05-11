@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rl_layer"
+    android:layout_width="283.9375dp"
+    android:layout_height="120.939dp"
+    android:minHeight="?android:attr/listPreferredItemHeight"
+    tools:background="@color/black">
+
+    <ImageView
+        android:id="@+id/iv_layer_shuru"
+        android:layout_width="120.939dp"
+        android:layout_height="120.939dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/layer_turnshuru"
+        android:visibility="gone" />
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/gif_layer_turnshuru"
+        android:layout_width="283.9375dp"
+        android:layout_height="120.939dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/gif_layer_turnshuru"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <!--桌号输入按钮-->
+    <ImageView
+        android:id="@+id/iv_insert_zhuohao_bg"
+        android:layout_width="283.9375dp"
+        android:layout_height="120.939dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/insert_zhuohao"
+        android:visibility="visible" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true">
+
+        <TextView
+            android:id="@+id/tv_selectPoint"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:clickable="false"
+            android:ellipsize="end"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:gravity="center"
+            android:maxLines="2"
+            android:text="@string/add_dining_table_name"
+            android:textColor="@color/layerText3"
+            android:textSize="60sp"
+            android:typeface="sans"
+            android:visibility="visible" />
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/gif_guangbiao"
+            android:layout_width="7.512dp"
+            android:layout_height="68.705dp"
+            android:layout_centerInParent="true"
+            android:layout_toLeftOf="@+id/tv_selectPoint"
+            android:src="@drawable/gif_guangbiao"
+            android:visibility="gone" />
+    </RelativeLayout>
+</RelativeLayout>
