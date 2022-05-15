@@ -54,7 +54,7 @@ public class BaseActivity extends Activity {
         getWindow().setFlags(1024, 1024);
         super.onCreate(bundle);
         initSound();
-       // initValue();
+        initValue();
     }
 
     private void initValue() {
@@ -100,8 +100,7 @@ public class BaseActivity extends Activity {
         });
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
-    public void getPointToken() {
+    public void getPointToken() {//获取 point token
         String str = "" + System.currentTimeMillis();
         String string = getResources().getString(R.string.appid);
         String md5 = MD5Utils.getMD5(string + getResources().getString(R.string.app_secret) + str);
@@ -121,7 +120,7 @@ public class BaseActivity extends Activity {
                 Message obtainMessage = BaseActivity.this.mNetHandler.obtainMessage();
                 obtainMessage.what = 1004;
                 obtainMessage.obj = string2;
-                BaseActivity.this.mNetHandler.sendMessage(obtainMessage);
+                BaseActivity.this.mNetHandler.sendMessage(obtainMessage);//设置全局pointToken
             }
         });
     }

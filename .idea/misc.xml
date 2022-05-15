@@ -12,6 +12,7 @@
         <entry key="app/src/main/res/drawable-nodpi/white_round_bg.xml" value="0.1" />
         <entry key="app/src/main/res/drawable-nodpi/xuans.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/point_bg_selector.xml" value="0.334" />
+        <entry key="app/src/main/res/drawable/setting_bg_selector.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/thumb.xml" value="0.1" />
         <entry key="app/src/main/res/layout/abc_action_bar_title_item.xml" value="0.26902173913043476" />
         <entry key="app/src/main/res/layout/acticity_main.xml" value="0.1" />
@@ -20,11 +21,22 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.14026402640264027" />
         <entry key="app/src/main/res/layout/activity_point.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_robot.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_setting.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.3808876811594203" />
+        <entry key="app/src/main/res/layout/adapter_criuse_gv_point.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/adapter_criuse_route_gv.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/adapter_gridview_point.xml" value="0.25" />
         <entry key="app/src/main/res/layout/adapter_gridview_select_point.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/adapter_settings_gridview.xml" value="0.1359375" />
+        <entry key="app/src/main/res/layout/dialog_criuse_pos_set.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/dialog_main.xml" value="0.17905578613281248" />
+        <entry key="app/src/main/res/layout/dialog_net_not.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/dialog_point_update.xml" value="0.15924092409240925" />
+        <entry key="app/src/main/res/layout/include_title.xml" value="0.1359375" />
         <entry key="app/src/main/res/layout/listview_layer_item.xml" value="0.1" />
         <entry key="app/src/main/res/layout/task_item_category.xml" value="0.1" />
         <entry key="app/src/main/res/layout/view_toast.xml" value="0.1" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1" />
       </map>
     </option>
   </component>
@@ -37,7 +49,7 @@
   <component name="VisualizationToolProject">
     <option name="state">
       <ProjectState>
-        <option name="scale" value="0.165" />
+        <option name="scale" value="0.1359375" />
       </ProjectState>
     </option>
   </component>

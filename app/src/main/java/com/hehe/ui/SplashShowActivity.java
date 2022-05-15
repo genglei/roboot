@@ -7,14 +7,15 @@ import android.os.Handler;
 import android.os.PersistableBundle;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.util.Consumer;
 
 import com.hehe.R;
 import com.hehe.utils.Util;
 import com.tbruyelle.rxpermissions3.RxPermissions;
+
+import io.reactivex.rxjava3.functions.Consumer;
+
 
 public class SplashShowActivity extends AppCompatActivity {
     private boolean isOnPause;
@@ -52,14 +53,24 @@ public class SplashShowActivity extends AppCompatActivity {
     }
 
     private void initPremission() {
+        new RxPermissions(this).request( "android.permission.WRITE_EXTERNAL_STORAGE")
+                .subscribe(new Consumer<Boolean>(){
+                    @Override
+                    public void accept(Boolean aBoolean) throws Exception {
+                        if (!aBoolean.booleanValue()) {
+                            Log.e(SplashShowActivity.access$000(SplashShowActivity.this), "accept: 未获取到相应的权限");
+                        }
+                    }
+                });
 //        new RxPermissions(this).request("android.permission.READ_PHONE_STATE", "android.permission.WRITE_EXTERNAL_STORAGE", "android.permission.RECORD_AUDIO", "android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION", "android.permission.WRITE_SETTINGS")
-//                .(new Consumer<Boolean>() { // from class: com.higgs.deliveryrobot.ui.SplashShowActivity.2
-//                    public void accept(@NonNull Boolean bool) {
-//                        if (!bool.booleanValue()) {
-//                            Log.e(SplashShowActivity.access$000(SplashShowActivity.this), "accept: 未获取到相应的权限");
-//                        }
-//                    }
-//                });
+//          .subscribe(new Consumer<Boolean>(){
+//              @Override
+//              public void accept(Boolean aBoolean) throws Exception {
+//                  if (!aBoolean.booleanValue()) {
+//                      Log.e(SplashShowActivity.access$000(SplashShowActivity.this), "accept: 未获取到相应的权限");
+//                  }
+//              }
+//          });
     }
 
     @Override // android.support.v4.app.FragmentActivity, android.app.Activity

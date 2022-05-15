@@ -1,22 +1,34 @@
 package com.hehe.ui;
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.RemoteException;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -24,24 +36,42 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.bumptech.glide.Glide;
 import com.hehe.R;
+import com.hehe.adapter.CriusePointAdapter;
+import com.hehe.adapter.CriuseRouteAdapter;
 import com.hehe.adapter.LayersListViewdapter;
 import com.hehe.adapter.SelectPointGridAdapter;
+import com.hehe.adapter.SettingsGridAdapter;
 import com.hehe.adapter.TaskCategoryAdapter;
+import com.hehe.bean.CriusePointModel;
+import com.hehe.bean.CriuseRouteCompare;
 import com.hehe.bean.FoodLayer;
+import com.hehe.bean.SwitchMode;
 import com.hehe.bean.TaskCategoryBean;
 import com.hehe.common.Constants;
+import com.hehe.db.CruiseVoiceDao;
+import com.hehe.db.CruiseVoiceTable;
+import com.hehe.db.DynamicHomePageDao;
+import com.hehe.db.DynamicHomePageTable;
 import com.hehe.db.PointTable;
 import com.hehe.db.PointTableDao;
+import com.hehe.db.TaskTable;
+import com.hehe.db.TaskTableDao;
 import com.hehe.interfaceUtil.MonitorListViewListener;
 import com.hehe.interfaceUtil.NetListener;
 import com.hehe.interfaceUtil.OnItemTouchListener;
+import com.hehe.utils.CusFullDialog;
 import com.hehe.utils.CusLogcat;
+import com.hehe.utils.CusToast;
 import com.hehe.utils.SharedPrefsUtil;
 import com.hehe.utils.Util;
 import com.hehe.view.KeyboardNormol;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -53,6 +83,7 @@ import java.util.List;
 public class RobotMainActivity extends BaseActivity implements View.OnClickListener {
     View mDecorView;
     public static final String TAG = "RobotMainActivity";
+    private DoMainTaskHandler doMainTaskHandler;
 
     @Override
     public void onCreate(@Nullable Bundle bundle) {
@@ -65,9 +96,107 @@ public class RobotMainActivity extends BaseActivity implements View.OnClickListe
         setContentView(R.layout.activity_robot);
         Util.NavigationBarStatusBar(this, true);
         initPermission();
+        initHandler();
         initView();
         initValue();
         initListener();
+    }
+
+    private static class DoMainTaskHandler extends Handler {//主要任务handler
+        private final WeakReference<RobotMainActivity> mActivity;
+
+        public DoMainTaskHandler(RobotMainActivity robotMainActivity) {
+            this.mActivity = new WeakReference<>(robotMainActivity);
+        }
+
+        @Override // android.os.Handler
+        public void handleMessage(Message message) {
+            RobotMainActivity robotMainActivity = this.mActivity.get();
+            if (robotMainActivity == null) {
+                super.handleMessage(message);
+            } else {
+                robotMainActivity.doMainTaskHandleMessage(message);
+            }
+        }
+    }
+    private int mCurrentType = -1;
+    private int mCruisePointIndex;
+    private int mMoveFlag;
+    private boolean mFunctionCruiseFlag = true;
+
+    private void doMainTaskHandleMessage(Message message) {//主要任务处理
+        CusLogcat.showDLog(TAG, "doMainTaskHandleMessage(Message msg)");
+        switch (message.what) {
+            case 212:
+//                goChargeTask();
+                return;
+            case 213:
+//                CusLogcat.showShangbaoELog(TAG, "mChargeState = " + this.mChargeState);
+//                goChuFangTask();
+                return;
+            case 214:
+//                this.mTaskSendDao.deleteAllTaskSend();
+//                this.mCusHandler.removeCallbacks(this.runnableRandomStr);
+//                startExcuteTask();
+                return;
+            case 215:
+//                goHostess();
+                return;
+            case 216:
+                int size = this.mCruiseRouteModels.size();
+                this.mCurrentType = 5;
+                for (int i = 0; i < size; i++) {
+                    CriusePointModel criusePointModel = this.mCruiseRouteModels.get(i);
+                    this.mCriuseSB.append(criusePointModel.pointReal);
+                    this.mTaskSendDao.add(new TaskTable(Integer.valueOf(i), 8, Integer.valueOf(i), criusePointModel.pointReal, 0, false, true));
+                    this.mCriuseSB.append(",");
+                }
+                CusLogcat.showDLog(TAG, "巡游路线:" + this.mCriuseSB.toString());
+                if (this.mCruisePointIndex < size) {
+                    CusLogcat.showDLog(TAG, "巡游路线 mCruiseRouteModels: " + this.mCruiseRouteModels.toString());
+//                    this.mRemote.transact(2, obtain, obtain2, 0);
+
+//                    Util.moveTarget(this.mSocketInterface, this.mCruiseRouteModels.get(this.mCruisePointIndex).pointReal);
+                }
+                this.mMoveFlag = 8;
+                this.mFunctionCruiseFlag = true;
+//               声音播放
+//                List<CruiseVoiceTable> queryAllCriuseVoice = this.mCruiseVoiceDao.queryAllCriuseVoice();
+//                if (queryAllCriuseVoice != null) {
+//                    int size2 = queryAllCriuseVoice.size();
+//                    for (int i2 = 0; i2 < size2; i2++) {
+//                        this.mCruiseVoiceTables.add(queryAllCriuseVoice.get(i2));
+//                    }
+//                    return;
+//                }
+                return;
+            default:
+                return;
+        }
+    }
+
+    private DynamicCorpusHandler mDynamicCorpusHandler;
+
+    private void initHandler() {
+        this.mDynamicCorpusHandler = new DynamicCorpusHandler(this);
+    }
+
+    private static class DynamicCorpusHandler extends Handler {
+        private final WeakReference<RobotMainActivity> mActivity;
+
+        public DynamicCorpusHandler(RobotMainActivity robotMainActivity) {
+            this.mActivity = new WeakReference<>(robotMainActivity);
+        }
+
+        @Override // android.os.Handler
+        public void handleMessage(Message message) {
+            RobotMainActivity robotMainActivity = this.mActivity.get();
+            if (robotMainActivity == null) {
+                super.handleMessage(message);
+            } else {
+                //cusDynamicCorpusHandleMessage(message);
+            }
+        }
     }
 
     //授权
@@ -126,12 +255,18 @@ public class RobotMainActivity extends BaseActivity implements View.OnClickListe
     private SelectPointGridAdapter mSelectGridAdapter;
     //桌号
     private PointTableDao mPointTableDao;
+    private DynamicHomePageDao mDynamicHomePageDao;
+    private DynamicHomePageTable mDynamicHomePageTable;
+
+    private TaskTableDao mTaskSendDao;
+    private CruiseVoiceDao mCruiseVoiceDao;
+
     private void initValue() {
 //        Util.showDorbar(false);
         this.mActivityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
 //        this.mUsherPointAdapter = new UsherPointAdapter(this);
-//        this.mCriusePointAdapter = new CriusePointAdapter(this);
-//        this.mCriuseRouteAdapter = new CriuseRouteAdapter(this);
+        this.mCriusePointAdapter = new CriusePointAdapter(this);
+        this.mCriuseRouteAdapter = new CriuseRouteAdapter(this);
 //        this.mUsherStartPointAdapter = new UsherStartPointAdapter(this);
 //        this.mPosStart = "";
 //        this.mRobotAnimationDialog = new RobotAnimationDialog(this);
@@ -143,13 +278,13 @@ public class RobotMainActivity extends BaseActivity implements View.OnClickListe
 //        EventBus.getDefault().register(this);
 //        this.mSwitchFan = SharedPrefsUtil.get("fan_switch_flag", true);
 //        this.mRollLidSwitch = SharedPrefsUtil.get("roll_lid_flag", true);
-//        this.mTaskSendDao = new TaskTableDao(this);
+        this.mTaskSendDao = new TaskTableDao(this);
         this.mPointTableDao = new PointTableDao(this);
-//        this.mCruiseVoiceDao = new CruiseVoiceDao(this);
+        this.mCruiseVoiceDao = new CruiseVoiceDao(this);
 //        this.mDefaultReplyDao = new DefaultReplyDao(this);
 //        this.mDynamicCorpusDao = new DynamicCorpusDao(this);
 //        this.mDynamicTextDao = new DynamicTextDao(this);
-//        this.mDynamicHomePageDao = new DynamicHomePageDao(this);
+        this.mDynamicHomePageDao = new DynamicHomePageDao(this);
 //        clearSharedPrefs();
 //        SharedPrefsUtil.put("password_base", "9986");
 //        CusLogcat.showLockELog(TAG, "init lock");
@@ -178,7 +313,6 @@ public class RobotMainActivity extends BaseActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
-
         CusLogcat.showLifeCycleELog(TAG, "onResume");
         resetSelectData();
     }
@@ -282,51 +416,15 @@ public class RobotMainActivity extends BaseActivity implements View.OnClickListe
         @Override // com.higgs.deliveryrobot.interfaceUtil.NetListener
         public void netSuccess(String str) {
             RobotMainActivity robotMainActivity = this.mActivity.get();
-            if (robotMainActivity != null) {
-                cusNetSuccess(str);
-            }
+//            if (robotMainActivity != null) {
+//                cusNetSuccess(str);
+//            }
         }
 
         @Override // com.higgs.deliveryrobot.interfaceUtil.NetListener
         public void netFail(Exception exc) {
             String str = RobotMainActivity.TAG;
             CusLogcat.showELog(str, "netFail(Exception e) e = " + exc.toString());
-        }
-    }
-
-    private int mDynamicLibraryNetRequestFlag;
-
-    private void cusNetSuccess(String str) {
-        String str2 = TAG;
-        CusLogcat.showDLog(str2, "netSuccess(String responseData) responseData = " + str);
-        String str3 = TAG;
-        CusLogcat.showDLog(str3, "netSuccess(String responseData) mDynamicLibraryNetRequestFlag = " + this.mDynamicLibraryNetRequestFlag);
-        switch (this.mDynamicLibraryNetRequestFlag) {
-            case 1:
-                this.mDynamicCorpusDao.deleteAllDynamicCorpus();
-                initDynamicCorpus(str);
-                break;
-            case 2:
-                this.mDynamicTextDao.deleteAllDynamicText();
-                initDynamicText(str);
-                break;
-            case 3:
-                this.mDynamicHomePageDao.deleteAllDynamicHomePage();
-                initDynamicHomePage(str);
-                break;
-            case 4:
-                this.mCruiseVoiceDao.deleteAllCruiseVoice();
-                initCruisePoint(str);
-                break;
-            case 5:
-                updateDBPoint(str);
-                break;
-        }
-        try {
-            this.mReportHandler.CommandResult("com.higgs.deliveryrobot.robotmainactivity", this.mMqttCommand, 0, "任务成功", "");
-        } catch (RemoteException e) {
-            String str4 = TAG;
-            CusLogcat.showDLog(str4, "else if (\"13\".equals(type)) catch (RemoteException e) e = " + e.getMessage());
         }
     }
 
@@ -581,7 +679,437 @@ public class RobotMainActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
+        if (view.getId() == R.id.tv_back_home) {
+            homeDialogExhibition();
+            for (int i = 0; i < this.mLayerList.size(); i++) {
+                FoodLayer foodLayer = this.mLayerList.get(i);
+                foodLayer.status = -1;
+                foodLayer.hasValue = 0;
+            }
+        }
+    }
 
+    private CusFullDialog mHomeDialog;
+    private int mDynamicCorpusMoveFlag;
+    private boolean mIsHardEstop2 = false;
+    private StringBuilder mCriuseSB = new StringBuilder();
+
+
+    private void homeDialogExhibition() {//首页dialog
+        CusFullDialog cusFullDialog;
+        CusLogcat.showDLog(TAG, "homeDialogExhibition()");
+        if (this.mHomeDialog == null) {
+            this.mHomeDialog = new CusFullDialog(this);
+        }
+        if (!isFinishing() && (cusFullDialog = this.mHomeDialog) != null && !cusFullDialog.isShowing()) {
+            this.mHomeDialog.show();
+        }
+        View inflate = getLayoutInflater().inflate(R.layout.dialog_main, (ViewGroup) null);
+        ImageView imageView = (ImageView) inflate.findViewById(R.id.iv_deliver);
+        ImageButton imageButton = (ImageButton) inflate.findViewById(R.id.iv_back_kitchen);
+        ImageButton imageButton2 = (ImageButton) inflate.findViewById(R.id.iv_charging);
+        ImageButton imageButton3 = (ImageButton) inflate.findViewById(R.id.iv_settting);
+        final FrameLayout frameLayout = (FrameLayout) inflate.findViewById(R.id.fl_up_scroll);
+        final ImageView imageView2 = (ImageView) inflate.findViewById(R.id.iv_lock_status);
+        final FrameLayout frameLayout2 = (FrameLayout) inflate.findViewById(R.id.fl_main_lock_bg);
+        final RelativeLayout relativeLayout = (RelativeLayout) inflate.findViewById(R.id.rl_lock_status);
+        ImageButton imageButton4 = (ImageButton) inflate.findViewById(R.id.iv_hostess);
+        ImageButton imageButton5 = (ImageButton) inflate.findViewById(R.id.iv_usher);
+        ImageButton imageButton6 = (ImageButton) inflate.findViewById(R.id.iv_criuse);
+        List<DynamicHomePageTable> queryAllPoint = this.mDynamicHomePageDao.queryAllPoint();
+        if (queryAllPoint != null && queryAllPoint.size() > 0) {
+            this.mDynamicHomePageTable = queryAllPoint.get(0);
+            if (this.mDynamicHomePageTable != null) {
+                Glide.with((Activity) this).load(this.mDynamicHomePageTable.icon).placeholder(R.mipmap.home_deliver_food).error(R.mipmap.home_deliver_food).into(imageView);
+            }
+            this.mDynamicHomePageTable = queryAllPoint.get(1);
+            if (this.mDynamicHomePageTable != null) {
+                Glide.with((Activity) this).load(this.mDynamicHomePageTable.icon).placeholder(R.mipmap.home_back_kitchen).error(R.mipmap.home_back_kitchen).into(imageButton);
+            }
+            this.mDynamicHomePageTable = queryAllPoint.get(2);
+            if (this.mDynamicHomePageTable != null) {
+                Glide.with((Activity) this).load(this.mDynamicHomePageTable.icon).placeholder(R.mipmap.home_charge).error(R.mipmap.home_charge).into(imageButton2);
+            }
+            this.mDynamicHomePageTable = queryAllPoint.get(3);
+            if (this.mDynamicHomePageTable != null) {
+                Glide.with((Activity) this).load(this.mDynamicHomePageTable.icon).placeholder(R.mipmap.home_usher).error(R.mipmap.home_usher).into(imageButton5);
+            }
+            this.mDynamicHomePageTable = queryAllPoint.get(4);
+            if (this.mDynamicHomePageTable != null) {
+                Glide.with((Activity) this).load(this.mDynamicHomePageTable.icon).placeholder(R.mipmap.home_hostess).error(R.mipmap.home_hostess).into(imageButton4);
+            }
+            this.mDynamicHomePageTable = queryAllPoint.get(5);
+            if (this.mDynamicHomePageTable != null) {
+                Glide.with((Activity) this).load(this.mDynamicHomePageTable.icon).placeholder(R.mipmap.home_cruise).error(R.mipmap.home_cruise).into(imageButton6);
+            }
+            this.mDynamicHomePageTable = queryAllPoint.get(6);
+            if (this.mDynamicHomePageTable != null) {
+                Glide.with((Activity) this).load(this.mDynamicHomePageTable.icon).placeholder(R.mipmap.home_setting).error(R.mipmap.home_setting).into(imageButton3);
+            }
+        }
+        //送餐模式，回到送餐页面
+        imageView.setOnClickListener(new View.OnClickListener() { // from class: com.higgs.deliveryrobot.ui.RobotMainActivity.78
+            @Override // android.view.View.OnClickListener
+            public void onClick(View view) {
+                RobotMainActivity.this.playSound();
+                if (!RobotMainActivity.this.isFinishing() && mHomeDialog != null && mHomeDialog.isShowing()) {
+                    mHomeDialog.dismiss();
+                }
+                CusLogcat.showLockELog(RobotMainActivity.TAG, "iv_deliver.setOnClickListener");
+                clickDevilerFoodItem(0);
+            }
+        });
+        //巡游模式
+        imageButton6.setOnClickListener(new View.OnClickListener() { // from class: com.higgs.deliveryrobot.ui.RobotMainActivity.77
+            @Override // android.view.View.OnClickListener
+            public void onClick(View view) {
+                RobotMainActivity.this.playSound();
+                mDynamicCorpusMoveFlag = -1;
+                if (mIsHardEstop2) {
+//                    startSpeak("请取消急停按钮后，再次点击您想去的目的地");
+                    return;
+                }
+                shareLoadCruiseRouteData();
+                int size = mCruiseRouteModels.size();
+                mCriuseSB.setLength(0);
+                mTaskSendDao.deleteAllTaskSend();
+                if (size > 0) {
+                    CusToast.showToast(Util.getStringByStringXml(R.string.start_cruise));
+                    doMainTaskHandler.sendEmptyMessageDelayed(216, 500L);
+                    return;
+                }
+                showCruiseStartDialog();
+            }
+        });
+        //设置按钮点击
+        imageButton3.setOnClickListener(new View.OnClickListener() { // from class: com.higgs.deliveryrobot.ui.RobotMainActivity.81
+            @Override // android.view.View.OnClickListener
+            public void onClick(View view) {
+                CusLogcat.showClickButtonELog(RobotMainActivity.TAG, "iv_setting.setOnClickListener");
+                RobotMainActivity.this.playSound();
+                showSettingsNewDialog();//展示设置弹窗
+            }
+        });
+        this.mHomeDialog.setView(inflate);
+        this.mHomeDialog.setContentView(inflate);
+        this.mHomeDialog.setCancelable(false);
+    }
+
+    private CusFullDialog mCriusePosSetDialog;
+    private CriusePointAdapter mCriusePointAdapter;
+    private CriuseRouteAdapter mCriuseRouteAdapter;
+    private ArrayList<CriusePointModel> mCriusePointModels = new ArrayList<>(10);
+
+    /**
+     * 展示巡游对话？巡游是什么模式
+     **/
+    private void showCruiseStartDialog() {
+        CusFullDialog cusFullDialog;
+        CusLogcat.showDLog(TAG, "showCruiseStartDialog()");
+        if (this.mCriusePosSetDialog == null) {
+            this.mCriusePosSetDialog = new CusFullDialog(this);
+        }
+        if (!isFinishing() && (cusFullDialog = this.mCriusePosSetDialog) != null && !cusFullDialog.isShowing()) {
+            this.mCriusePosSetDialog.show();
+        }
+        View inflate = getLayoutInflater().inflate(R.layout.dialog_criuse_pos_set, (ViewGroup) null);
+        ImageView imageView = (ImageView) inflate.findViewById(R.id.iv_back);
+        final TextView textView = (TextView) inflate.findViewById(R.id.tv_set_route);
+        final LinearLayout linearLayout = (LinearLayout) inflate.findViewById(R.id.ll_set);
+        LinearLayout linearLayout2 = (LinearLayout) inflate.findViewById(R.id.ll_criuse_set);
+        final GridView gridView = (GridView) inflate.findViewById(R.id.gv_criuse_route);
+        final GridView gridView2 = (GridView) inflate.findViewById(R.id.gv_criuse_point);
+        final Button button = (Button) inflate.findViewById(R.id.bt_set_criuse_route);
+        gridView2.setAdapter((ListAdapter) this.mCriusePointAdapter);
+        gridView.setAdapter((ListAdapter) this.mCriuseRouteAdapter);
+        shareLoadCruiseRouteData();
+        this.mCriuseRouteAdapter.updatePoint(this.mCruiseRouteModels);
+        ((TextView) inflate.findViewById(R.id.tv_title)).setText(Util.getStringByStringXml(R.string.cruise_route));
+        if (this.mCruiseRouteModels.size() > 0) {
+            gridView.setVisibility(View.VISIBLE);
+            textView.setText(Util.getStringByStringXml(R.string.modify_route));
+        } else {
+            gridView.setVisibility(View.GONE);
+            textView.setText(Util.getStringByStringXml(R.string.set_route));
+        }
+        linearLayout.setVisibility(View.VISIBLE);
+        button.setVisibility(View.GONE);
+        final int[] iArr = {0};
+        final CriusePointModel[] criusePointModelArr = {new CriusePointModel("", "", false)};
+        gridView2.setOnItemClickListener(new AdapterView.OnItemClickListener() { // from class: com.higgs.deliveryrobot.ui.RobotMainActivity.102
+            @Override // android.widget.AdapterView.OnItemClickListener
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long j) {
+                CriusePointModel criusePointModel = mCriusePointModels.get(i);
+                if (criusePointModel != null) {
+                    if (criusePointModel.isSelect) {
+                        CriusePointModel criusePointModel2 = criusePointModelArr[0];
+                        if (!(criusePointModel2 == null || criusePointModel2.pointAlias == null || criusePointModel2.pointAlias.equals(criusePointModel.pointAlias))) {
+                            minusPointSelectNum(criusePointModel);
+                        }
+                        criusePointModelArr[0] = criusePointModel;
+                        criusePointModel.isSelect = false;
+                        int[] iArr2 = iArr;
+                        int i2 = iArr2[0] - 1;
+                        iArr2[0] = i2;
+                        iArr2[0] = i2;
+                    } else {
+                        int[] iArr3 = iArr;
+                        int i3 = iArr3[0] + 1;
+                        iArr3[0] = i3;
+                        iArr3[0] = i3;
+                        criusePointModel.isSelect = true;
+                    }
+                }
+                if (checkSelectPoint()) {
+                    button.setBackgroundResource(R.mipmap.button_usher_selected);
+                } else {
+                    button.setBackgroundResource(R.mipmap.button_usher_no_select);
+                }
+                criusePointModel.selectNum = iArr[0];
+                mCriusePointAdapter.updatePoint(mCriusePointModels);
+            }
+        });
+        loadCriuseData();
+        this.mCriusePointAdapter.updatePoint(this.mCriusePointModels);
+        imageView.setOnClickListener(new View.OnClickListener() { // from class: com.higgs.deliveryrobot.ui.RobotMainActivity.103
+            @Override // android.view.View.OnClickListener
+            public void onClick(View view) {
+                RobotMainActivity.this.playSound();
+                if (!RobotMainActivity.this.isFinishing() && mCriusePosSetDialog != null && mCriusePosSetDialog.isShowing()) {
+                    mCriusePosSetDialog.dismiss();
+                    mCriusePointModels.clear();
+                }
+            }
+        });
+        button.setOnClickListener(new View.OnClickListener() { // from class: com.higgs.deliveryrobot.ui.RobotMainActivity.104
+            @Override // android.view.View.OnClickListener
+            public void onClick(View view) {
+                if (checkSelectPoint()) {
+                    initCruiseRouteData();
+                    mCriuseRouteAdapter.updatePoint(mCruiseRouteModels);
+                    button.setVisibility(View.GONE);
+                    gridView2.setVisibility(View.GONE);
+                    linearLayout.setVisibility(View.VISIBLE);
+                    gridView.setVisibility(View.VISIBLE);
+                    textView.setText(Util.getStringByStringXml(R.string.modify_route));
+                    iArr[0] = 0;
+                    CusToast.showToast(Util.getStringByStringXml(R.string.set_success));
+                    return;
+                }
+                CusToast.showToast(Util.getStringByStringXml(R.string.select_cruise_route));
+            }
+        });
+        linearLayout2.setOnClickListener(new View.OnClickListener() { // from class: com.higgs.deliveryrobot.ui.RobotMainActivity.105
+            @Override // android.view.View.OnClickListener
+            public void onClick(View view) {
+                mCruiseRouteModels.clear();
+                loadCriuseData();
+                mCriusePointAdapter.updatePoint(mCriusePointModels);
+                button.setVisibility(View.VISIBLE);
+                gridView2.setVisibility(View.VISIBLE);
+                gridView.setVisibility(View.GONE);
+                linearLayout.setVisibility(View.GONE);
+            }
+        });
+        this.mCriusePosSetDialog.setContentView(inflate);
+    }
+
+    private void initCruiseRouteData() {
+        this.mCruiseRouteModels.clear();
+        SharedPrefsUtil.put("criuse_route", "");
+        CusLogcat.showDLog(TAG, "initCruiseRouteData()");
+        String str = TAG;
+        CusLogcat.showDLog(str, "initCruiseRouteData() SharedPrefsUtil.get(CRIUSE_ROUTE,\"\") = " + SharedPrefsUtil.get("criuse_route", ""));
+        int size = this.mCriusePointModels.size();
+        for (int i = 0; i < size; i++) {
+            CriusePointModel criusePointModel = this.mCriusePointModels.get(i);
+            if (criusePointModel.selectNum > 0) {
+                this.mCruiseRouteModels.add(criusePointModel);
+            }
+        }
+        Collections.sort(this.mCruiseRouteModels, new CriuseRouteCompare());
+        String str2 = TAG;
+        CusLogcat.showDLog(str2, "initCruiseRouteData() mCruiseRouteModels = " + this.mCruiseRouteModels.toString());
+        JSONArray jSONArray = new JSONArray();
+        int size2 = this.mCruiseRouteModels.size();
+        for (int i2 = 0; i2 < size2; i2++) {
+            CriusePointModel criusePointModel2 = this.mCruiseRouteModels.get(i2);
+            JSONObject jSONObject = new JSONObject();
+            try {
+                jSONObject.put("route_num", criusePointModel2.selectNum);
+                jSONObject.put("route_name", criusePointModel2.pointAlias);
+                jSONArray.put(jSONObject);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        String str3 = TAG;
+        CusLogcat.showDLog(str3, "initCruiseRouteData() criuseRouteJsonArray = " + jSONArray);
+        SharedPrefsUtil.put("criuse_route", jSONArray.toString());
+    }
+
+    private void loadCriuseData() {
+        this.mCriusePointModels.clear();
+        CusLogcat.showDLog(TAG, "loadCriuseData()");
+        if (this.mPointTableDao == null) {
+            this.mPointTableDao = new PointTableDao(this);
+        }
+        List<PointTable> queryAllPointByPointType = this.mPointTableDao.queryAllPointByPointType(0);
+        String str = TAG;
+        CusLogcat.showDLog(str, "loadCriuseData 中所有点位：" + queryAllPointByPointType.toString());
+        int size = queryAllPointByPointType.size();
+        for (int i = 0; i < size; i++) {
+            PointTable pointTable = queryAllPointByPointType.get(i);
+            this.mCriusePointModels.add(new CriusePointModel(pointTable.tableAliasName, pointTable.tableRealPoint, false));
+        }
+    }
+
+    private void minusPointSelectNum(CriusePointModel criusePointModel) {
+        CusLogcat.showDLog(TAG, "minusPointSelectNum(CriusePointModel c)");
+        int size = this.mCriusePointModels.size();
+        for (int i = 0; i < size; i++) {
+            CriusePointModel criusePointModel2 = this.mCriusePointModels.get(i);
+            if (criusePointModel2 != null && criusePointModel2.selectNum > criusePointModel.selectNum) {
+                criusePointModel2.selectNum--;
+            }
+        }
+    }
+
+    private boolean checkSelectPoint() {
+        CusLogcat.showDLog(TAG, "checkSelectPoint()");
+        String str = TAG;
+        CusLogcat.showDLog(str, "mCriusePointModels = " + this.mCriusePointModels.toString());
+        int size = this.mCriusePointModels.size();
+        for (int i = 0; i < size; i++) {
+            if (this.mCriusePointModels.get(i).isSelect) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private ArrayList<CriusePointModel> mCruiseRouteModels = new ArrayList<>(10);
+
+    private void shareLoadCruiseRouteData() {
+//        CusLogcat.showDLog(TAG, "shareLoadCruiseRouteData()");
+//        this.mCruiseRouteModels.clear();
+//        String str = SharedPrefsUtil.get("criuse_route", "");
+//        String str2 = TAG;
+//        CusLogcat.showDLog(str2, "shareLoadCruiseRouteData() cruiseRoute = " + str);
+//        if (!TextUtils.isEmpty(str) && Util.isJsonArray(str)) {
+//            try {
+//                JSONArray jSONArray = new JSONArray(str);
+//                int length = jSONArray.length();
+//                for (int i = 0; i < length; i++) {
+//                    JSONObject jSONObject = jSONArray.getJSONObject(i);
+//                    CriusePointModel criusePointModel = new CriusePointModel();
+//                    int i2 = jSONObject.getInt("route_num");
+//                    String string = jSONObject.getString("route_name");
+//                    criusePointModel.isSelect = true;
+//                    criusePointModel.selectNum = i2;
+//                    criusePointModel.pointReal = string;
+//                    this.mCruiseRouteModels.add(criusePointModel);
+//                }
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        Collections.sort(this.mCruiseRouteModels, new CriuseRouteCompare());
+//        String str3 = TAG;
+//        CusLogcat.showDLog(str3, "shareLoadCruiseRouteData() mCruiseRouteModels = " + this.mCruiseRouteModels.toString());
+    }
+
+    private TextView mElectricityTV;
+    private CusFullDialog mSettingsDialog;
+    private ImageView mChargingIV;
+
+    /**
+     * 展示设置弹窗
+     **/
+    private void showSettingsNewDialog() {//展示设置窗口
+        CusFullDialog cusFullDialog;
+        if (this.mSettingsDialog == null) {
+            this.mSettingsDialog = new CusFullDialog(this);
+        }
+        this.mSettingsDialog.setWidthAndHeight(-1, -1);
+        if (!isFinishing() && (cusFullDialog = this.mSettingsDialog) != null && !cusFullDialog.isShowing()) {
+            this.mSettingsDialog.show();
+        }
+        View inflate = getLayoutInflater().inflate(R.layout.activity_setting, (ViewGroup) null);
+        this.mSettingsDialog.setContentView(inflate);
+        this.mSettingsDialog.setCancelable(false);
+        ((TextView) inflate.findViewById(R.id.tv_title)).setText(String.format(Util.getStringByStringXml(R.string.set_interface), 3));
+        this.mElectricityTV = (TextView) inflate.findViewById(R.id.tv_electricity);
+//        this.mBatteryView = (BatteryView) inflate.findViewById(2131230867);
+        this.mElectricityTV.setVisibility(View.VISIBLE);
+//        this.mBatteryView.setVisibility(0);
+        this.mChargingIV = (ImageView) inflate.findViewById(R.id.iv_charging);
+        //返回按钮点击；
+        ((ImageView) inflate.findViewById(R.id.iv_back)).setOnClickListener(new View.OnClickListener() { // from class: com.higgs.deliveryrobot.ui.RobotMainActivity.14
+            @Override // android.view.View.OnClickListener
+            public void onClick(View view) {
+                if (mSettingsDialog.isShowing()) {
+                    mSettingsDialog.dismiss();
+                    ;
+                }
+            }
+        });
+        ArrayList arrayList = new ArrayList();
+        arrayList.clear();
+        arrayList.add(new SwitchMode(Util.getStringByStringXml(R.string.volume_set), R.drawable.volume_ctrl));//音量
+        arrayList.add(new SwitchMode(Util.getStringByStringXml(R.string.function_set), R.drawable.function));//功能设置
+        arrayList.add(new SwitchMode(Util.getStringByStringXml(R.string.authority_set), R.drawable.authority_manage));//权限设置
+        arrayList.add(new SwitchMode(Util.getStringByStringXml(R.string.devices_control), R.drawable.device_on_off));//设备开关机
+        arrayList.add(new SwitchMode(Util.getStringByStringXml(R.string.net_set), R.drawable.net_set));//网络设置
+        arrayList.add(new SwitchMode(Util.getStringByStringXml(R.string.point_save), R.drawable.point_record));//点位录入
+        arrayList.add(new SwitchMode(Util.getStringByStringXml(R.string.about_us), R.drawable.about_us));//关于我们
+        final SettingsGridAdapter settingsGridAdapter = new SettingsGridAdapter(this, arrayList);
+        ((GridView) inflate.findViewById(R.id.gv_layout)).setAdapter((ListAdapter) settingsGridAdapter);
+        settingsGridAdapter.setOnItemTouchListener(new OnItemTouchListener() { // from class: com.higgs.deliveryrobot.ui.RobotMainActivity.15
+            @Override // com.higgs.deliveryrobot.interfaceUtil.OnItemTouchListener
+            public void onTouch(int i) {
+                doSettingsItemClick(settingsGridAdapter, i);
+            }
+        });
+    }
+
+    //设置页面的点击事件
+    private void doSettingsItemClick(SettingsGridAdapter settingsGridAdapter, int i) {
+        keyBoardCancle();
+        playSound();
+        switch (i) {
+            case 0:
+//                showVolumeDialog();
+                return;
+            case 1:
+//                showFunctionDialog();
+                return;
+            case 2:
+//                startActivityForResult(new Intent(this, ModifyPassActivity.class), 200);
+                return;
+            case 3:
+//                showControlHardwareDialog();
+                return;
+            case 4:
+//                startActivity(new Intent(this, WifiActivity.class));
+                return;
+            case 5:
+                keyBoardCancle();
+                startActivity(new Intent(this, TablePointActivity.class));
+                return;
+            case 6:
+//                showVersionUpdateDialog();
+                return;
+            default:
+                return;
+        }
+    }
+
+    public void keyBoardCancle() {
+        View peekDecorView = getWindow().peekDecorView();
+        if (peekDecorView != null) {
+            ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(peekDecorView.getWindowToken(), 0);
+        }
     }
 
     public List<FoodLayer> getLayerList() {

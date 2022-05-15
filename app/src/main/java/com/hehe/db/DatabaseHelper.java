@@ -2,12 +2,14 @@ package com.hehe.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Environment;
 
 import com.hehe.utils.CusLogcat;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
+import com.tbruyelle.rxpermissions3.RxPermissions;
 
 import java.io.File;
 import java.sql.SQLException;
@@ -16,25 +18,28 @@ import java.util.Map;
 
 /* loaded from: classes.dex */
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
-    private static final String TABLE_NAME = "deliveryRobot.db";
+    private static final String TABLE_NAME = "heheRobot.db";
     private static final String TAG = "DatabaseHelper";
+    public static  String TABLE_PATH="";
     private static DatabaseHelper instance;
     private Context context;
     private Map<String, Dao> daos = new HashMap();
 
-    @Override // com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper
+    @Override
     public void onUpgrade(SQLiteDatabase sQLiteDatabase, ConnectionSource connectionSource, int i, int i2) {
     }
 
     static {
-        File file = new File("/sdcard/database");
+        TABLE_PATH=Environment.getExternalStorageDirectory().getPath()+"/database";
+        File file = new File(Environment.getExternalStorageDirectory().getPath());
         if (!file.exists()) {
-            file.mkdir();
+            boolean create= file.mkdir();
+            CusLogcat.showDLog(TAG, "创建数据库成功======》"+file.canWrite()+"======"+create);
         }
     }
 
     private DatabaseHelper(Context context) {
-        super(context, "/sdcard/database" + File.separator + "deliveryRobot.db", null, 114);
+        super(context, TABLE_PATH + File.separator + TABLE_NAME, null, 114);
         this.context = context;
     }
 

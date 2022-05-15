@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fl_usher_point"
+    android:layout_width="246dp"
+    android:layout_height="120dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_point"
+        android:layout_width="246dp"
+        android:layout_height="120dp"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="2"
+        android:text="TextView"
+        android:textColor="@color/textColorforItemTitle"
+        android:textSize="34sp" />
+
+    <TextView
+        android:id="@+id/tv_select_criuse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|right"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@mipmap/criuse_item_num_bg"
+        android:gravity="center"
+        android:text="01"
+        android:textColor="@color/white" />
+</FrameLayout>

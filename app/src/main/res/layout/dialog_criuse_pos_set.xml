@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/usher_bg"
+    android:orientation="vertical">
+
+    <include layout="@layout/include_title" />
+
+    <LinearLayout
+        android:id="@+id/ll_set"
+        android:layout_width="match_parent"
+        android:layout_height="105dp"
+        android:layout_marginTop="30dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="64dp"
+            android:text="@string/cruise_route"
+            android:textSize="30sp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:id="@+id/ll_criuse_set"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_set_route"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="设置路线"
+                android:textSize="30sp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="120dp"
+                android:background="@drawable/hostess_select_arrow" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <GridView
+        android:id="@+id/gv_criuse_route"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="16dp"
+        android:background="@color/white"
+        android:horizontalSpacing="3dp"
+        android:listSelector="@color/translucent"
+        android:numColumns="5"
+        android:paddingLeft="64dp"
+        android:paddingTop="@dimen/padding_18"
+        android:paddingRight="64dp"
+        android:paddingBottom="@dimen/padding_18"
+        android:verticalSpacing="16dp"
+        android:visibility="gone" />
+
+    <GridView
+        android:id="@+id/gv_criuse_point"
+        android:layout_width="match_parent"
+        android:layout_height="730dp"
+        android:layout_marginLeft="@dimen/margin_84"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="@dimen/margin_84"
+        android:background="@mipmap/usher_point_bg"
+        android:horizontalSpacing="3dp"
+        android:listSelector="@color/translucent"
+        android:numColumns="5"
+        android:padding="@dimen/padding_18"
+        android:verticalSpacing="3dp"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/bt_set_criuse_route"
+        android:layout_width="606dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="-55dp"
+        android:background="@mipmap/button_usher_no_select"
+        android:text="@string/set_cruise_route"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        android:visibility="gone" />
+</LinearLayout>

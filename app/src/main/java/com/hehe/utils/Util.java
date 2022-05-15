@@ -319,6 +319,9 @@ public class Util {
         }
     }
 
+    /**
+     * 移动到某个点位
+     * **/
     public static void moveTarget(ISocketInterface iSocketInterface, String str) {
         CusLogcat.showDLog(TAG, "moveTarget(ISocketInterface socketInterface, String point)");
         if (iSocketInterface == null) {
