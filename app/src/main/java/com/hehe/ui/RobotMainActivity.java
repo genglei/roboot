@@ -1,5 +1,13 @@
 package com.hehe.ui;
 
+
+import static com.hehe.common.Constants.DISMISS_COMPLETE_DIALOG;
+import static com.hehe.common.Constants.HOST_XIAO_PANG;
+import static com.hehe.common.Constants.MAP_POINTS;
+import static com.hehe.common.Constants.MSG_GO_CRIUSE;
+import static com.hehe.common.Constants.MSG_GO_MARKET;
+import static com.hehe.common.Constants.TYPE_KITCHEN;
+
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
@@ -8,6 +16,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.os.RemoteException;
 import android.text.Editable;
@@ -78,12 +87,20 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import ai.yunji.water.callback.RobotMoveCallback;
+import ai.yunji.water.entity.Marker;
+import ai.yunji.water.task.RobotConnectAction;
 
 public class RobotMainActivity extends BaseActivity implements View.OnClickListener {
     View mDecorView;
     public static final String TAG = "RobotMainActivity";
     private DoMainTaskHandler doMainTaskHandler;
+    private int mDynamicLibraryNetRequestFlag;
+    private int mRobotStatus;
 
     @Override
     public void onCreate(@Nullable Bundle bundle) {
@@ -96,6 +113,7 @@ public class RobotMainActivity extends BaseActivity implements View.OnClickListe
         setContentView(R.layout.activity_robot);
         Util.NavigationBarStatusBar(this, true);
         initPermission();
+
         initHandler();
         initView();
         initValue();
@@ -105,7 +123,8 @@ public class RobotMainActivity extends BaseActivity implements View.OnClickListe
     private static class DoMainTaskHandler extends Handler {//主要任务handler
         private final WeakReference<RobotMainActivity> mActivity;
 
-        public DoMainTaskHandler(RobotMainActivity robotMainActivity) {
+        public DoMainTaskHandler(RobotMainActivity robotMainActivity, Looper looper) {
+            super(looper);
             this.mActivity = new WeakReference<>(robotMainActivity);
         }
 
@@ -119,11 +138,15 @@ public class RobotMainActivity extends BaseActivity implements View.OnClickListe
             }
         }
     }
+
     private int mCurrentType = -1;
     private int mCruisePointIndex;
     private int mMoveFlag;
     private boolean mFunctionCruiseFlag = true;
 
+    /**
+     * 子线程执行消息
+     * */
     private void doMainTaskHandleMessage(Message message) {//主要任务处理
         CusLogcat.showDLog(TAG, "doMainTaskHandleMessage(Message msg)");
         switch (message.what) {
@@ -134,7 +157,7 @@ public class RobotMainActivity extends BaseActivity implements View.OnClickListe
 //                CusLogcat.showShangbaoELog(TAG, "mChargeState = " + this.mChargeState);
 //                goChuFangTask();
                 return;
-            case 214:
+            case MSG_GO_MARKET:
 //                this.mTaskSendDao.deleteAllTaskSend();
 //                this.mCusHandler.removeCallbacks(this.runnableRandomStr);
 //                startExcuteTask();
@@ -142,16 +165,22 @@ public class RobotMainActivity extends BaseActivity implements View.OnClickListe
             case 215:
 //                goHostess();
                 return;
-            case 216:
+            case MSG_GO_CRIUSE://巡游模式
                 int size = this.mCruiseRouteModels.size();
+                ArrayList<Marker> markers  = new ArrayList<>();
                 this.mCurrentType = 5;
                 for (int i = 0; i < size; i++) {
                     CriusePointModel criusePointModel = this.mCruiseRouteModels.get(i);
                     this.mCriuseSB.append(criusePointModel.pointReal);
                     this.mTaskSendDao.add(new TaskTable(Integer.valueOf(i), 8, Integer.valueOf(i), criusePointModel.pointReal, 0, false, true));
                     this.mCriuseSB.append(",");
+                    // todo  巡游模式的数据结构封装成marker
                 }
                 CusLogcat.showDLog(TAG, "巡游路线:" + this.mCriuseSB.toString());
+
+                RobotConnectAction.init(this).sendMoveMarkers(markers,-1,new RobotMoveCallback(){
+
+                });
                 if (this.mCruisePointIndex < size) {
                     CusLogcat.showDLog(TAG, "巡游路线 mCruiseRouteModels: " + this.mCruiseRouteModels.toString());
 //                    this.mRemote.transact(2, obtain, obtain2, 0);
@@ -175,9 +204,157 @@ public class RobotMainActivity extends BaseActivity implements View.OnClickListe
         }
     }
 
+    private long mStartTime = System.currentTimeMillis();
+    private List<String> tableNameList = new ArrayList();
+    Map<String, String> mTaskMap = new HashMap();
+    /**
+     * 开始配送模式，先送到餐桌、然后送会厨房
+     * */
+    private void startExcuteTask() {
+        List<PointTable> queryByPointAliasName;
+        PointTable pointTable;
+        List<PointTable> queryByPointAliasName2;
+        PointTable pointTable2;
+        CusLogcat.showELog(TAG, "startExcuteTask()");
+        this.mCurrentType = 4;
+        boolean z = false;
+        this.mMoveFlag = 0;
+        this.mStartTime = System.currentTimeMillis();
+        checkPointAndKitchen();
+        String str = SharedPrefsUtil.get("0table_real_point", "");
+        String str2 = SharedPrefsUtil.get("1table_real_point", "");
+        this.tableNameList.clear();
+        this.tableNameList.add(str);
+        this.tableNameList.add(str2);
+        for (int i = 0; i < this.tableNameList.size(); i++) {//根据别名进行查询
+            if (!TextUtils.isEmpty(this.tableNameList.get(i)) && (queryByPointAliasName2 = this.mPointTableDao.queryByPointAliasName(this.tableNameList.get(i))) != null && queryByPointAliasName2.size() > 0 && (pointTable2 = queryByPointAliasName2.get(0)) != null && !TextUtils.isEmpty(pointTable2.tableRealPoint)) {
+                CusLogcat.showDLog(TAG, "把选中的点位 " + pointTable2.tableRealPoint + " 放入TaskTable");
+                this.mTaskSendDao.add(new TaskTable(Integer.valueOf(i), Integer.valueOf(i), pointTable2.id, pointTable2.tableRealPoint, 0, false, true));
+                this.mTaskMap.put("" + i, pointTable2.tableRealPoint);
+            }
+        }
+        List<PointTable> queryAllPointByPointType = this.mPointTableDao.queryAllPointByPointType(TYPE_KITCHEN);
+        if (queryAllPointByPointType != null && queryAllPointByPointType.size() > 0 && (pointTable = queryAllPointByPointType.get(0)) != null && !TextUtils.isEmpty(pointTable.tableRealPoint)) {
+            CusLogcat.showLog("增加厨房的点位 " + pointTable.tableRealPoint + " 到TaskTable");
+            this.mTaskSendDao.add(new TaskTable(3, 3, queryAllPointByPointType.get(0).id, pointTable.tableRealPoint, 0, false, false));
+            if (this.mTaskMap != null) {
+                CusLogcat.showELog(TAG, "taskMap" + this.mTaskMap.size());
+                if (!pointTable.tableRealPoint.equals(this.mTaskMap.get("" + (this.mTaskMap.size() - 1)))) {
+                    this.mTaskMap.put("" + this.mTaskMap.size(), queryAllPointByPointType.get(0).tableRealPoint);
+                }
+            } else {
+                CusLogcat.showELog(TAG, "taskMap为空");
+            }
+        }
+        if (!TextUtils.isEmpty(str) || !TextUtils.isEmpty(str2)) {
+            for (int i2 = 0; i2 < this.tableNameList.size(); i2++) {
+                String str3 = this.tableNameList.get(i2);
+                if (!TextUtils.isEmpty(str3) && ((queryByPointAliasName = this.mPointTableDao.queryByPointAliasName(str3)) == null || queryByPointAliasName.size() <= 0)) {
+                    //startSpeak("您输入的桌号不存在，请输入正确的桌号");
+                    CusToast.showToast(Util.getStringByStringXml(R.string.position_no_exist));
+                    z = true;
+                    break;
+                }
+            }
+            if (z) {
+                CusLogcat.showLog("输入的桌号不存在");
+                return;
+            }
+           // doStartTask(true);
+            this.mRobotStatus = 4;
+            return;
+        }
+        CusToast.showToast(Util.getStringByStringXml(R.string.please_select_objective_position));
+//       startSpeak(Util.getStringByStringXml(R.string.please_select_objective_position));
+    }
+
+//    private void doStartTask(Boolean bool) {
+//        CusFullDialog cusFullDialog;
+//        CusLogcat.showELog(TAG, "doStartTask isFirst = " + bool);
+//        if (!isFinishing() && (cusFullDialog = this.mTaskingDialog) != null && cusFullDialog.isShowing()) {
+//            this.mTaskingDialog.dismiss();
+//        }
+//        Message obtain = Message.obtain();
+//        obtain.what = DISMISS_COMPLETE_DIALOG;
+//        this.mCusHandler.sendMessageDelayed(obtain, 500L);
+//        List<TaskTable> taskListByTaskState = getTaskListByTaskState(0);
+//        if (taskListByTaskState.size() > 0) {
+//            int i = 0;
+//            while (true) {
+//                if (i >= taskListByTaskState.size()) {
+//                    break;
+//                }
+//                TaskTable taskTable = taskListByTaskState.get(i);
+//                if (taskTable != null && taskTable.taskState.intValue() == 0) {
+//                    CusLogcat.showELog(TAG, "未到达的任务：" + taskTable.toString());
+//                    List<PointTable> queryByTablePointId = this.mPointTableDao.queryByTablePointId(taskListByTaskState.get(i).tablePointId.intValue());
+//                    if (queryByTablePointId != null && queryByTablePointId.size() > 0) {
+//                        deliveryFood(queryByTablePointId.get(0).tableRealPoint);
+//                        this.mIsFirst = bool.booleanValue();
+//                        this.mTaskSend = taskListByTaskState.get(i);
+//                        this.mTablePoint = queryByTablePointId.get(0);
+//                        break;
+//                    }
+//                }
+//                i++;
+//            }
+//        } else {
+//            CusLogcat.showDLog(TAG, "mTaskSendList is null");
+//        }
+//        int i2 = this.mMoveFlag;
+//        if (i2 != 6 && i2 != 7) {
+//            taskListByTaskState.size();
+//            if (taskListByTaskState.size() == 3) {
+//                CusLogcat.showDLog(TAG, "mSwitchFan = " + this.mSwitchFan);
+//                if (this.mSwitchFan) {
+//                    this.mCusHandler.postDelayed(new Runnable() { // from class: com.higgs.deliveryrobot.ui.RobotMainActivity.13
+//                        @Override // java.lang.Runnable
+//                        public void run() {
+//                            try {
+//                                RobotMainActivity.access$2600(RobotMainActivity.this).SendMsg(205);
+//                            } catch (RemoteException e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//                    }, 1000L);
+//                }
+//            }
+//            if (taskListByTaskState.size() == 1) {
+//                try {
+//                    this.mSerialSerivce.SendMsg(204);
+//                } catch (RemoteException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//    }
+
+    /**
+     * 检测是否有厨房点位、是否有餐桌点位
+     * **/
+    private void checkPointAndKitchen() {
+        List<PointTable> queryAllPointByPointType = this.mPointTableDao.queryAllPointByPointType(0);
+        if (queryAllPointByPointType == null || queryAllPointByPointType.size() > 0) {
+            List<PointTable> queryAllPointByPointType2 = this.mPointTableDao.queryAllPointByPointType(1);
+            if (queryAllPointByPointType2 != null && queryAllPointByPointType2.size() <= 0) {
+                CusToast.showToast(Util.getStringByStringXml(R.string.add_kitchen_backstage));
+                return;
+            }
+            return;
+        }
+        CusToast.showToast(Util.getStringByStringXml(R.string.add_point_backstage));
+    }
+
     private DynamicCorpusHandler mDynamicCorpusHandler;
 
     private void initHandler() {
+        HandlerThread thread = new HandlerThread();
+        thread.start();
+        try {
+            doMainTaskHandler = new DoMainTaskHandler(this,thread.getLooper());
+        } catch (Exception e) {
+
+        }
         this.mDynamicCorpusHandler = new DynamicCorpusHandler(this);
     }
 
@@ -413,18 +590,107 @@ public class RobotMainActivity extends BaseActivity implements View.OnClickListe
             this.mActivity = new WeakReference<>(robotMainActivity);
         }
 
-        @Override // com.higgs.deliveryrobot.interfaceUtil.NetListener
+        @Override
         public void netSuccess(String str) {
             RobotMainActivity robotMainActivity = this.mActivity.get();
-//            if (robotMainActivity != null) {
-//                cusNetSuccess(str);
-//            }
+            if (robotMainActivity != null) {
+                robotMainActivity.cusNetSuccess(str);
+            }
         }
 
         @Override // com.higgs.deliveryrobot.interfaceUtil.NetListener
         public void netFail(Exception exc) {
             String str = RobotMainActivity.TAG;
             CusLogcat.showELog(str, "netFail(Exception e) e = " + exc.toString());
+        }
+    }
+
+    /**
+     * 网络请求数据成功
+     * **/
+    private void cusNetSuccess(String str) {
+        String str2 = TAG;
+        CusLogcat.showDLog(str2, "netSuccess(String responseData) responseData = " + str);
+        String str3 = TAG;
+        CusLogcat.showDLog(str3, "netSuccess(String responseData) mDynamicLibraryNetRequestFlag = " + this.mDynamicLibraryNetRequestFlag);
+        switch (this.mDynamicLibraryNetRequestFlag) {
+            case 1:
+
+                break;
+            case 2:
+
+                break;
+            case 3:
+
+                break;
+            case 4:
+
+                break;
+            case 5:
+                updateDBPoint(str);
+                break;
+        }
+//        try {
+//            //上报
+//            this.mReportHandler.CommandResult("com.higgs.deliveryrobot.robotmainactivity", this.mMqttCommand, 0, "任务成功", "");
+//        } catch (RemoteException e) {
+//            String str4 = TAG;
+//            CusLogcat.showDLog(str4, "else if (\"13\".equals(type)) catch (RemoteException e) e = " + e.getMessage());
+//        }
+    }
+
+    private void updateDBPoint(String str) {
+        String str2 = TAG;
+        CusLogcat.showDLog(str2, "updateDBPoint(String responseData) = " + str);
+        if (str != null) {
+            try {
+                JSONObject jSONObject = new JSONObject(str);
+                if (jSONObject.has("data")) {
+                    JSONArray jSONArray = jSONObject.getJSONArray("data");
+                    int length = jSONArray.length();
+                    String str3 = TAG;
+                    CusLogcat.showDLog(str3, "jaSize = " + length);
+                    for (int i = 0; i < length; i++) {
+                        JSONObject jSONObject2 = jSONArray.getJSONObject(i);
+                        String string = jSONObject2.getString("name");
+                        String string2 = jSONObject2.getString("intro");
+                        String str4 = "";
+                        if (jSONObject2.has("bellNum")) {
+                            str4 = jSONObject2.getString("bellNum");
+                        }
+                        String str5 = TAG;
+                        CusLogcat.showDLog(str5, "realName = " + string + ";aliasName = " + string2 + ";ringName = " + str4);
+                        if (this.mPointTableDao == null) {
+                            this.mPointTableDao = new PointTableDao(this);
+                        }
+                        List<PointTable> queryByPointAliasName = this.mPointTableDao.queryByPointAliasName(string2);
+                        String str6 = TAG;
+                        CusLogcat.showDLog(str6, "pointTables = " + queryByPointAliasName.toString());
+                        if (queryByPointAliasName == null || queryByPointAliasName.size() <= 0) {
+                            String str7 = TAG;
+                            CusLogcat.showDLog(str7, "在数据库中没有找到" + string2 + "该点位");
+                            PointTable pointTable = new PointTable();
+                            pointTable.tableAliasName = string2;
+                            pointTable.pointType = 0;
+                            pointTable.ringNum = Util.stringToByte(str4);
+                            pointTable.tableRealPoint = string;
+                            this.mPointTableDao.add(pointTable);
+                        } else {
+                            PointTable pointTable2 = queryByPointAliasName.get(0);
+                            String str8 = TAG;
+                            CusLogcat.showDLog(str8, "pointTable = " + pointTable2.toString());
+                            pointTable2.ringNum = Util.stringToByte(str4);
+                            this.mPointTableDao.update(pointTable2);
+                        }
+                    }
+                    CusToast.showToast(Util.getStringByStringXml(R.string.sync_success));
+                }
+            } catch (Exception e) {
+                CusToast.showToast(Util.getStringByStringXml(R.string.sync_fail) + e.getMessage());
+                e.printStackTrace();
+                String str9 = TAG;
+                CusLogcat.showDLog(str9, "updateDBPoint Exception e = " + e.getMessage());
+            }
         }
     }
 
@@ -679,7 +945,18 @@ public class RobotMainActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.tv_back_home) {
+        if (view.getId() == mStartTaskLL.getId()) {
+            CusLogcat.showDLog(TAG, "开始送物");
+            this.doMainTaskHandler.removeMessages(MSG_GO_MARKET);
+            playSound();
+            if (this.mIsHardEstop2) {
+               // startSpeak("请取消急停按钮后，再次点击您想去的目的地");
+                return;
+            }
+            Message obtain = Message.obtain();
+            obtain.what = MSG_GO_MARKET;
+            this.doMainTaskHandler.sendMessageDelayed(obtain, 1000L);
+        } else  if (view.getId() == R.id.tv_back_home) {
             homeDialogExhibition();
             for (int i = 0; i < this.mLayerList.size(); i++) {
                 FoodLayer foodLayer = this.mLayerList.get(i);
@@ -775,7 +1052,7 @@ public class RobotMainActivity extends BaseActivity implements View.OnClickListe
                 mTaskSendDao.deleteAllTaskSend();
                 if (size > 0) {
                     CusToast.showToast(Util.getStringByStringXml(R.string.start_cruise));
-                    doMainTaskHandler.sendEmptyMessageDelayed(216, 500L);
+                    doMainTaskHandler.sendEmptyMessageDelayed(MSG_GO_CRIUSE, 500L);
                     return;
                 }
                 showCruiseStartDialog();
@@ -1073,7 +1350,9 @@ public class RobotMainActivity extends BaseActivity implements View.OnClickListe
         });
     }
 
-    //设置页面的点击事件
+    /**
+     * 设置页面的点击事件
+     * */
     private void doSettingsItemClick(SettingsGridAdapter settingsGridAdapter, int i) {
         keyBoardCancle();
         playSound();
@@ -1114,5 +1393,14 @@ public class RobotMainActivity extends BaseActivity implements View.OnClickListe
 
     public List<FoodLayer> getLayerList() {
         return this.mLayerList;
+    }
+
+    /**
+     * 请求点位,应该都走同步刷新机制吧，每次上游有数据更新以后，每个机器手动点击一下更新，直接更新，暂时不每次可见重启启动
+     **/
+    private void requestMapPoint() {//请求 固定地点
+        mDynamicLibraryNetRequestFlag=5;
+        CusLogcat.showDLog(TAG, "requestMapPoint()");
+        get(HOST_XIAO_PANG + MAP_POINTS + "no=" + this.mRobotId + "&map=" + mCurrentMapName, this.mPointToken);
     }
 }

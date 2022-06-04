@@ -9,6 +9,8 @@ import android.os.Process;
 import com.hehe.ui.SplashShowActivity;
 import com.hehe.utils.CusLogcat;
 
+import ai.yunji.water.task.RobotConnectAction;
+
 /* loaded from: classes.dex */
 public class HiggsApplication extends Application implements Thread.UncaughtExceptionHandler {
     private static final String TAG = "HiggsApplication";
@@ -23,6 +25,7 @@ public class HiggsApplication extends Application implements Thread.UncaughtExce
         super.onCreate();
         CusLogcat.showELog(TAG, "onCreate");
         mApp = this;
+        RobotConnectAction.init(this);
     }
 
     @Override // java.lang.Thread.UncaughtExceptionHandler

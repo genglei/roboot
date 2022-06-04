@@ -1,23 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Keyboard xmlns:android="http://schemas.android.com/apk/res/android" android:keyBackground="@android:color/transparent" android:keyWidth="231.362dp" android:keyHeight="119.437dp" android:verticalGap="6.761dp">
+<Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
+    android:keyWidth="230dp"
+    android:keyHeight="90dp"
+    android:keyBackground="@android:color/transparent"
+    android:verticalGap="6.761dp">
     <Row>
-        <Key android:horizontalGap="6.009dp" android:codes="49" android:keyLabel="1"/>
-        <Key android:horizontalGap="6.009dp" android:codes="50" android:keyLabel="2"/>
-        <Key android:horizontalGap="6.009dp" android:codes="51" android:keyLabel="3"/>
+        <Key
+            android:codes="49"
+            android:horizontalGap="6.009dp"
+            android:keyLabel="1" />
+        <Key
+            android:codes="50"
+            android:horizontalGap="6.009dp"
+            android:keyLabel="2" />
+        <Key
+            android:codes="51"
+            android:horizontalGap="6.009dp"
+            android:keyLabel="3" />
     </Row>
     <Row>
-        <Key android:horizontalGap="6.009dp" android:codes="52" android:keyLabel="4"/>
-        <Key android:horizontalGap="6.009dp" android:codes="53" android:keyLabel="5"/>
-        <Key android:horizontalGap="6.009dp" android:codes="54" android:keyLabel="6"/>
+        <Key
+            android:codes="52"
+            android:horizontalGap="6.009dp"
+            android:keyLabel="4" />
+        <Key
+            android:codes="53"
+            android:horizontalGap="6.009dp"
+            android:keyLabel="5" />
+        <Key
+            android:codes="54"
+            android:horizontalGap="6.009dp"
+            android:keyLabel="6" />
     </Row>
     <Row>
-        <Key android:horizontalGap="6.009dp" android:codes="55" android:keyLabel="7"/>
-        <Key android:horizontalGap="6.009dp" android:codes="56" android:keyLabel="8"/>
-        <Key android:horizontalGap="6.009dp" android:codes="57" android:keyLabel="9"/>
+        <Key
+            android:codes="55"
+            android:horizontalGap="6.009dp"
+            android:keyLabel="7" />
+        <Key
+            android:codes="56"
+            android:horizontalGap="6.009dp"
+            android:keyLabel="8" />
+        <Key
+            android:codes="57"
+            android:horizontalGap="6.009dp"
+            android:keyLabel="9" />
     </Row>
     <Row android:labelTextSize="10sp">
-        <Key android:labelTextSize="10sp" android:horizontalGap="6.009dp" android:codes="-2" android:keyLabel="ABC"/>
-        <Key android:horizontalGap="6.009dp" android:codes="48" android:keyLabel="0"/>
-        <Key android:labelTextSize="10dp" android:horizontalGap="6.009dp" android:codes="-5" android:keyEdgeFlags="right" android:isRepeatable="true" android:keyIcon="@drawable/delshuzi"/>
+        <Key
+            android:codes="-2"
+            android:horizontalGap="6.009dp"
+            android:keyLabel="ABC"
+            android:labelTextSize="10sp" />
+        <Key
+            android:codes="48"
+            android:horizontalGap="6.009dp"
+            android:keyLabel="0" />
+        <Key
+            android:codes="-5"
+            android:horizontalGap="6.009dp"
+            android:isRepeatable="true"
+            android:keyEdgeFlags="right"
+            android:keyIcon="@drawable/delshuzi"
+            android:labelTextSize="10dp" />
     </Row>
 </Keyboard>

@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
-
+    <!--顶部状态栏 -->
     <LinearLayout
         android:id="@+id/rl_daohanglan"
         android:layout_width="match_parent"
-        android:layout_height="75.117dp"
+        android:layout_height="45dp"
         android:background="#000000"
         android:gravity="center_vertical"
         android:orientation="horizontal">
-
+        <!--回首页-->
         <TextView
             android:id="@+id/tv_back_home"
-            android:layout_width="110dp"
-            android:layout_height="80dp"
+            android:layout_width="60dp"
+            android:layout_height="45dp"
             android:background="@drawable/daohang_back"
             android:padding="30dp"
             android:textSize="30sp" />
-
+        <!--今日任务-->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="@dimen/margin_42"
@@ -56,41 +56,48 @@
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_weight="1" />
-
+        <!--停止按钮-->
         <ImageView
             android:id="@+id/iv_stop"
             android:layout_width="33.803dp"
             android:layout_height="33.803dp"
             android:layout_marginRight="55dp"
             android:src="@drawable/icon_stop"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:visibility="visible" />
     </LinearLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/rl_rightshuru"
         android:layout_width="match_parent"
-        android:layout_height="826.2891dp"
-        android:background="@drawable/bg">
+        android:layout_height="match_parent"
+        android:background="@drawable/bg"
+        android:orientation="horizontal"
+        android:weightSum="4">
 
         <RelativeLayout
-            android:layout_width="400.375dp"
-            android:layout_height="700.9766dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="122.441dp"
-            android:layout_marginTop="15.023dp"
-            android:background="@drawable/canzhuo_bg">
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/canzhuo_bg" />
 
             <ListView
                 android:id="@+id/lv_layers"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="153.568dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="140dp"
                 android:background="@null"
                 android:cacheColorHint="@android:color/transparent"
                 android:descendantFocusability="blocksDescendants"
                 android:divider="@android:color/transparent"
-                android:dividerHeight="152.488dp"
+                android:dividerHeight="30dp"
                 android:listSelector="@android:color/transparent" />
 
             <EditText
@@ -102,7 +109,7 @@
                 android:maxLength="8"
                 android:text="@string/first_layer"
                 android:textColor="@color/blue"
-                android:visibility="visible"
+                android:visibility="gone"
                 tools:visibility="visible" />
 
             <EditText
@@ -114,9 +121,9 @@
                 android:layout_marginTop="60dp"
                 android:maxLength="8"
                 android:text="@string/second_layer"
-                tools:visibility="visible"
                 android:textColor="@color/red"
-                android:visibility="gone" />
+                android:visibility="gone"
+                tools:visibility="visible" />
 
             <EditText
                 android:id="@+id/editText3"
@@ -127,40 +134,44 @@
                 android:layout_marginTop="60dp"
                 android:maxLength="8"
                 android:text="@string/third_layer"
-                tools:visibility="visible"
                 android:textColor="@color/black"
-                android:visibility="visible" />
+                android:visibility="gone"
+                tools:visibility="visible" />
         </RelativeLayout>
 
-        <ImageView
-            android:id="@+id/iv_arrow0"
-            android:layout_width="87.887dp"
-            android:layout_height="87.887dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="546.8516dp"
-            android:layout_marginTop="224.601dp"
-            android:background="@drawable/arrow"
-            android:visibility="gone" />
+        <RelativeLayout
+            android:layout_width="48dp"
+            android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/iv_arrow1"
-            android:layout_width="87.887dp"
-            android:layout_height="87.887dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="546.8516dp"
-            android:layout_marginTop="519.0547dp"
-            android:background="@drawable/arrow"
-            android:visibility="gone" />
+            <ImageView
+                android:id="@+id/iv_arrow0"
+                android:layout_width="47.887dp"
+                android:layout_height="47.887dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="170dp"
+                android:background="@drawable/arrow"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+            <ImageView
+                android:id="@+id/iv_arrow1"
+                android:layout_width="47.887dp"
+                android:layout_height="47.887dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="319.0547dp"
+                android:background="@drawable/arrow"
+                android:visibility="gone"
+                tools:visibility="visible" />
+        </RelativeLayout>
 
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="700dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="550.7734dp"
-            android:layout_marginTop="15.775dp"
+            android:layout_weight="3"
             android:background="@drawable/shuzi_parent_bg">
 
             <ImageView
@@ -168,7 +179,7 @@
                 android:layout_height="2.254dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginTop="76dp"
+                android:layout_marginTop="@dimen/grid_title_height"
                 android:background="@drawable/line_right" />
             <!-- 标题-->
             <GridView
@@ -180,14 +191,15 @@
                 android:gravity="center"
                 android:listSelector="@android:color/transparent"
                 android:numColumns="2" />
-
+            <!-- 选择座位部分 -->
             <RelativeLayout
-                android:layout_width="707.6016dp"
-                android:layout_height="498.0234dp"
+                android:id="@+id/choice_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginLeft="23.286dp"
-                android:layout_marginTop="105.915dp">
+                android:layout_marginTop="80dp"
+                android:layout_marginBottom="100dp">
                 <!--键盘1-->
                 <android.inputmethodservice.KeyboardView
                     android:id="@+id/keyboard_view1"
@@ -250,20 +262,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="600.7578dp"
+                android:layout_alignParentBottom="true"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/tv_start_deliver"
-                    android:layout_width="536.3359dp"
-                    android:layout_height="106.667dp"
+                    android:layout_width="236.3359dp"
+                    android:layout_height="56.667dp"
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:text="@string/start_delivery"
                     android:textColor="@color/white"
-                    android:textSize="37.559dp" />
+                    android:textSize="27.559dp" />
             </LinearLayout>
         </RelativeLayout>
-    </RelativeLayout>
+    </LinearLayout>
 </LinearLayout>

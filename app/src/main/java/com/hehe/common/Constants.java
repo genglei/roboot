@@ -3,7 +3,7 @@ package com.hehe.common;
 import java.util.regex.Pattern;
 
 /* loaded from: classes.dex */
-public interface Constants {
+public class Constants {
     public static final String ANSWERS_DEFAULT = "/openapi/robots/configures/answers/cruise";
     public static final String ANSWERS_PROCESS = "/openapi/robots/configs/answers/process";
     public static final int API_CURRENTMAP_NAME = 10005;
@@ -361,4 +361,7 @@ public interface Constants {
         public static final String UPDATE_PROCESS_VOICE = "update_process_voice";
         public static final String UPDATE_UNLINE_DEPOT = "update_unline_depot";
     }
+
+    public static final int TYPE_KITCHEN=1;
+    public static final int TYPE_POINT=0;
 }

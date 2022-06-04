@@ -151,27 +151,27 @@ public class LayersListViewdapter extends BaseAdapter {
         }
         this.monitorListViewListener.onChangeValue();
         boolean isContainsChinese = Util.isContainsChinese(str);
-        if (isContainsChinese) {
-            viewHolder.tv_selectPoint.setTextSize(35.0f);
-        } else {
-            viewHolder.tv_selectPoint.setTextSize(40.0f);
-        }
+//        if (isContainsChinese) {
+//            viewHolder.tv_selectPoint.setTextSize(35.0f);
+//        } else {
+//            viewHolder.tv_selectPoint.setTextSize(40.0f);
+//        }
         if (!isContainsChinese || foodLayer.status != 1) {
             viewHolder.gif_guangbiao.setVisibility(View.GONE);
         } else {
             viewHolder.gif_guangbiao.setVisibility(View.GONE);
         }
-        if (this.isFirst) {
-            ObjectAnimator ofFloat = ObjectAnimator.ofFloat(viewHolder.iv_insert_zhuohao_bg, "scaleX", 0.3f, 1.0f);
-            ofFloat.setDuration(300L);
-            ofFloat.start();
-            ObjectAnimator ofFloat2 = ObjectAnimator.ofFloat(viewHolder.tv_selectPoint, "scaleX", 0.3f, 1.0f);
-            ofFloat2.setDuration(200L);
-            ofFloat2.start();
-            ObjectAnimator ofFloat3 = ObjectAnimator.ofFloat(viewHolder.gif_guangbiao, "alpha", 0.0f, 1.0f);
-            ofFloat3.setDuration(700L);
-            ofFloat3.start();
-        }
+//        if (this.isFirst) {
+//            ObjectAnimator ofFloat = ObjectAnimator.ofFloat(viewHolder.iv_insert_zhuohao_bg, "scaleX", 0.3f, 1.0f);
+//            ofFloat.setDuration(300L);
+//            ofFloat.start();
+//            ObjectAnimator ofFloat2 = ObjectAnimator.ofFloat(viewHolder.tv_selectPoint, "scaleX", 0.3f, 1.0f);
+//            ofFloat2.setDuration(200L);
+//            ofFloat2.start();
+//            ObjectAnimator ofFloat3 = ObjectAnimator.ofFloat(viewHolder.gif_guangbiao, "alpha", 0.0f, 1.0f);
+//            ofFloat3.setDuration(700L);
+//            ofFloat3.start();
+//        }
         return view2;
     }
 

@@ -1,80 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/home_bg">
+    android:background="@mipmap/home_bg"
+    android:paddingLeft="20dp"
+    android:paddingTop="20dp"
+    android:paddingRight="20dp">
 
     <ImageView
         android:id="@+id/iv_deliver"
-        android:layout_width="537.8359dp"
-        android:layout_height="600.1875dp"
-        android:layout_marginStart="20.188dp"
-        android:layout_marginTop="51.737dp"
-        android:background="@mipmap/home_deliver_food" />
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@mipmap/home_deliver_food"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.4" />
 
     <ImageButton
         android:id="@+id/iv_back_kitchen"
-        android:layout_width="326.7578dp"
-        android:layout_height="298.2109dp"
-        android:layout_marginStart="4.507dp"
-        android:layout_marginTop="51.737dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_toEndOf="@+id/iv_deliver"
-        android:background="@mipmap/home_back_kitchen" />
+        android:background="@mipmap/home_back_kitchen"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintLeft_toRightOf="@id/iv_deliver"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.3" />
 
     <ImageButton
         android:id="@+id/iv_charging"
-        android:layout_width="326.7578dp"
-        android:layout_height="298.2109dp"
-        android:layout_below="@+id/iv_back_kitchen"
-        android:layout_marginStart="4.507dp"
-        android:layout_marginTop="4.507dp"
-        android:layout_toEndOf="@+id/iv_deliver"
-        android:background="@mipmap/home_charge" />
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@mipmap/home_charge"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintLeft_toRightOf="@id/iv_deliver"
+        app:layout_constraintTop_toBottomOf="@id/iv_back_kitchen"
+        app:layout_constraintWidth_percent="0.3" />
 
     <ImageButton
         android:id="@+id/iv_usher"
-        android:layout_width="328.2578dp"
-        android:layout_height="147dp"
-        android:layout_marginStart="4.507dp"
-        android:layout_marginTop="51.737dp"
-        android:layout_toEndOf="@+id/iv_back_kitchen"
-        android:background="@mipmap/home_usher" />
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@mipmap/home_usher"
+        android:scaleType="fitCenter"
+        app:layout_constraintDimensionRatio="2"
+        app:layout_constraintLeft_toRightOf="@id/iv_back_kitchen"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.3" />
 
     <ImageButton
         android:id="@+id/iv_hostess"
-        android:layout_width="328dp"
-        android:layout_height="146dp"
-        android:layout_below="@+id/iv_usher"
-        android:layout_marginStart="4.507dp"
-        android:layout_marginTop="4.507dp"
-        android:layout_toEndOf="@+id/iv_back_kitchen"
-        android:background="@mipmap/home_hostess" />
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@mipmap/home_hostess"
+        app:layout_constraintDimensionRatio="2"
+        app:layout_constraintLeft_toRightOf="@id/iv_back_kitchen"
+        app:layout_constraintTop_toBottomOf="@id/iv_usher"
+        app:layout_constraintWidth_percent="0.3" />
 
     <ImageButton
         android:id="@+id/iv_criuse"
-        android:layout_width="328dp"
-        android:layout_height="146dp"
-        android:layout_below="@+id/iv_hostess"
-        android:layout_marginStart="4.507dp"
-        android:layout_marginTop="6dp"
-        android:layout_toEndOf="@+id/iv_charging"
-        android:background="@mipmap/home_cruise" />
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@mipmap/home_cruise"
+        app:layout_constraintDimensionRatio="2"
+        app:layout_constraintLeft_toRightOf="@id/iv_back_kitchen"
+        app:layout_constraintTop_toBottomOf="@id/iv_hostess"
+        app:layout_constraintWidth_percent="0.3" />
 
     <ImageButton
         android:id="@+id/iv_settting"
-        android:layout_width="328dp"
-        android:layout_height="146dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_below="@+id/iv_criuse"
-        android:layout_marginStart="4.507dp"
-        android:layout_marginTop="4.507dp"
-        android:layout_toEndOf="@+id/iv_charging"
-        android:background="@mipmap/home_setting" />
+        android:background="@mipmap/home_setting"
+        app:layout_constraintDimensionRatio="2"
+        app:layout_constraintLeft_toRightOf="@id/iv_back_kitchen"
+        app:layout_constraintTop_toBottomOf="@id/iv_criuse"
+        app:layout_constraintWidth_percent="0.3" />
 
     <FrameLayout
         android:id="@+id/fl_up_scroll"
         android:layout_width="100dp"
         android:layout_height="150dp"
-        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:visibility="gone">
 
@@ -97,7 +107,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/up_scroll_bg">
+        android:background="@drawable/up_scroll_bg"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <ImageView
             android:id="@+id/iv_lock_status"
@@ -106,4 +117,4 @@
             android:layout_centerInParent="true"
             android:src="@drawable/lock_close" />
     </RelativeLayout>
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

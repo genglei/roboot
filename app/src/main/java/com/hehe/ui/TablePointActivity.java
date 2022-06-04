@@ -1,5 +1,8 @@
 package com.hehe.ui;
 
+import static com.hehe.common.Constants.HOST_XIAO_PANG;
+import static com.hehe.common.Constants.MAP_POINTS;
+
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -45,7 +48,9 @@ import okhttp3.FormBody;
 import okhttp3.Request;
 import okhttp3.Response;
 
-/* loaded from: classes.dex */
+/**
+ * 点位录入
+ **/
 public class TablePointActivity extends BaseActivity implements View.OnClickListener {
     private static final String TAG = "TablePointActivity";
     private Button mAddBT;
@@ -66,7 +71,7 @@ public class TablePointActivity extends BaseActivity implements View.OnClickList
     private RadioButton rb3;
 
     /* JADX INFO: Access modifiers changed from: protected */
-    @Override // com.higgs.deliveryrobot.ui.BaseActivity, android.app.Activity
+    @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         requestWindowFeature(1);
@@ -207,7 +212,7 @@ public class TablePointActivity extends BaseActivity implements View.OnClickList
 
     /**
      * 重新加载数据
-     * **/
+     **/
     private void reloadData() {
         this.mTablePointList.clear();
         List<PointTable> queryAllPointByPointType = this.mPointTableDao.queryAllPointByPointType(0);
@@ -241,18 +246,21 @@ public class TablePointActivity extends BaseActivity implements View.OnClickList
         }
     }
 
+    /**
+     * 同步点位
+     */
     private void syncPoint() {
-        CusLogcat.showDLog(TAG, "syncPoint()");
-        if (TextUtils.isEmpty(this.mPointToken)) {
-            CusToast.showToast(Util.getStringByStringXml(R.string.mPointToken_is_empty));
-            getPointToken();
-        } else if (TextUtils.isEmpty(this.mRobotId)) {
-            CusToast.showToast(Util.getStringByStringXml(R.string.mRobotId_is_empty));
-        } else if (TextUtils.isEmpty(mCurrentMapName)) {
-            CusToast.showToast(Util.getStringByStringXml(R.string.mCurrentMapName_is_empty));
-        } else {
-            get("https://api.mk.higgsdynamics.com/openapi/robots/maps/points?no=" + this.mRobotId + "&map=" + mCurrentMapName, this.mPointToken);
-        }
+//        CusLogcat.showDLog(TAG, "syncPoint()");
+//        if (TextUtils.isEmpty(this.mPointToken)) {
+//            CusToast.showToast(Util.getStringByStringXml(R.string.mPointToken_is_empty));
+//            getPointToken();
+//        } else if (TextUtils.isEmpty(this.mRobotId)) {
+//            CusToast.showToast(Util.getStringByStringXml(R.string.mRobotId_is_empty));
+//        } else if (TextUtils.isEmpty(mCurrentMapName)) {
+//            CusToast.showToast(Util.getStringByStringXml(R.string.mCurrentMapName_is_empty));
+//        } else {
+//        }
+        get(HOST_XIAO_PANG+MAP_POINTS+"?no=" + this.mRobotId + "&map=" + mCurrentMapName, this.mPointToken);
     }
 
     private void addPointToDatabase() {

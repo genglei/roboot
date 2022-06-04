@@ -71,7 +71,8 @@
     <GridView
         android:id="@+id/gv_criuse_point"
         android:layout_width="match_parent"
-        android:layout_height="730dp"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="100dp"
         android:layout_marginLeft="@dimen/margin_84"
         android:layout_marginTop="16dp"
         android:layout_marginRight="@dimen/margin_84"
